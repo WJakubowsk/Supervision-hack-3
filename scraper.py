@@ -43,7 +43,9 @@ def get_all_links_pdfs(query: str, company_site: str) -> List[str]:
             with open('links_to_pdfs.txt', 'a') as f:
                 f.write(result["href"] + '\n')
             scraped_links.append(result["href"])
-    return scraped_links
+    
+    # return list of scraped list without duplicates
+    return list(set(scraped_links))
 
 def save_scrf_file(pdf_file_url: str, company_code: str, company_name: str, destination_dir: str = './'):
     """
