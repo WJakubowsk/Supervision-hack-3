@@ -76,7 +76,7 @@ def main():
     df = pd.read_csv('data/zaklady.csv', sep=';')
 
     years = [2018, 2019, 2020, 2021, 2022]
-    for _, row in df.head(1).iterrows():
+    for _, row in df.iterrows():
         company_site = row['LINK DO STRONY ZAKŁADU']
         company_code = row['KOD LEI ZAKŁADU']
         company_name = row['NAZWA ZAKŁADU']
