@@ -10,8 +10,12 @@ import requests
 import re
 import io
 from pdfminer.high_level import extract_text
+from typing import List
 
-def get_all_links_pdfs(query, company_site):
+def get_all_links_pdfs(query: str, company_site: str) -> List[str]:
+    """
+    Gathers, saves and returns list of links for given company_site url, using the provided query.
+    """
     op = webdriver.ChromeOptions()
     op.add_argument('headless')
     driver = webdriver.Chrome(options=op)
@@ -41,7 +45,7 @@ def get_all_links_pdfs(query, company_site):
             scraped_links.append(result["href"])
     return scraped_links
 
-def save_scrf_file(pdf_file_url: str, company_code: str, company_name: str, company_url: str, destination_dir: str = './'):
+def save_scrf_file(pdf_file_url: str, company_code: str, company_name: str, destination_dir: str = './'):
     """
     Saves a PDF file into a specified directory with the appropriate name of <[year]_SFCR_[company code]_[company name].pdf>.
     Ignores the pdf files which are not related to the desired insurance company.
@@ -69,7 +73,6 @@ def save_scrf_file(pdf_file_url: str, company_code: str, company_name: str, comp
     
 
 def main():
-
     df = pd.read_csv('data/zaklady.csv', sep=';')
 
     years = [2018, 2019, 2020, 2021, 2022]
@@ -82,11 +85,8 @@ def main():
             query = f'Sprawozdanie o wypłacalności i kondycji finansowej OR Solvency and financial condition report OR Sprawozdanie na temat wypłacalności i kondycji finansowej OR SFCR site:{company_site} filetype:pdf {company_name} {year}'
             try:
                 pdf_urls = get_all_links_pdfs(query, company_site)
-                print('----------------')
-                print(pdf_urls)
-                print('----------------')
                 for pdf_url in pdf_urls:
-                    save_scrf_file(pdf_url, company_code, company_name, company_site,
+                    save_scrf_file(pdf_url, company_code, company_name,
                                     destination_dir='./data/sfcr/')
             except:
                 time.sleep(10)
