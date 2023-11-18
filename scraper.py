@@ -44,8 +44,6 @@ def get_all_links_pdfs(query: str, company_site: str, verbose=False) -> List[str
     scraped_links = []
     for result in soup.find_all("a", {"href": True}):
         if result["href"] and result["href"].startswith(f'https://{company_site}'):
-            with open('links_to_pdfs.txt', 'a') as f:
-                f.write(result["href"] + '\n')
             scraped_links.append(result["href"])
 
     # return list of scraped list without duplicates
@@ -60,6 +58,9 @@ def save_scrf_file(pdf_file_url: str, company_code: str, company_name: str, dest
     # get pdf content from the given url
     response = requests.get(pdf_file_url)
 
+    if response.status_code != 200:
+        raise Exception(f"Failed to download the file from {pdf_file_url}")
+
     # extract infromation about year (`unkown` if not found)
     with io.BytesIO(response.content) as stream:
         pdf_text = extract_text(stream, page_numbers=[0])
@@ -70,40 +71,41 @@ def save_scrf_file(pdf_file_url: str, company_code: str, company_name: str, dest
     # define the name of the pdf file according to the specified format
     filename = f"{year}_SFCR_{company_code}_{company_name}.pdf"
 
-
-    if response.status_code == 200:
-        with open(destination_dir + filename, 'wb') as file:
-            file.write(response.content)
-    else:
-        print("Failed to download the file.")
+    with open(destination_dir + filename, 'wb') as file:
+        file.write(response.content)
 
 
 def main(args):
     df = pd.read_csv(args.data_path, sep=';')
-
     years = [2018, 2019, 2020, 2021, 2022]
     for _, row in df.iterrows():
         company_site = row['LINK DO STRONY ZAKŁADU']
         company_code = row['KOD LEI ZAKŁADU']
         company_name = row['NAZWA ZAKŁADU']
-        for year in years:
-            print(company_site, year)
-            query = f'"Sprawozdanie o wypłacalności i kondycji finansowej" OR "Solvency and financial condition report" OR "Sprawozdanie na temat wypłacalności i kondycji finansowej" OR "SFCR" site:{company_site} filetype:pdf {company_name} {year}'
-            try:
-                pdf_urls = get_all_links_pdfs(query, company_site)
-                print(pdf_urls)
+        try:
+            pdf_urls = []
+            for year in years:
+                print(company_site, year)
+                query = f'"Sprawozdanie o wypłacalności i kondycji finansowej" OR "Solvency and financial condition report" OR "Sprawozdanie na temat wypłacalności i kondycji finansowej" OR "SFCR" site:{company_site} filetype:pdf {company_name} {year}'
+                pdf_urls += get_all_links_pdfs(query, company_site)
+
+            pdf_urls = list(set(pdf_urls))
+            if args.pdf_downloader == 'yes':
                 for pdf_url in pdf_urls:
                     save_scrf_file(pdf_url, company_code, company_name,
                                     destination_dir=args.destination_dir)
-            except Exception as e:
-                print(e)
-                print("Failed to retrieve google.com, trying again in 10 seconds...")
-                time.sleep(10)
+            with open(args.destination_dir+'output.txt', 'a') as f:
+                for pdf_url in pdf_urls:
+                    f.write(pdf_url + '\n')
+        except Exception as e:
+            print(e)
+            time.sleep(10)
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Your script description')
     parser.add_argument('--data_path', type=str, default='data/zaklady.csv', help='Path to the CSV file')
     parser.add_argument('--destination_dir', type=str, default='./data/sfcr/', help='Directory to save PDF files')
+    parser.add_argument('--pdf_downloader', type=str, default='yes', help='Whether to download PDF files')
     args = parser.parse_args()
     main(args)
