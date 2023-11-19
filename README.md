@@ -8,7 +8,11 @@ Projekt składa się z wielu modułów, które razem tworzą docelowe narzędzie
 - algorytmy przeprowadzające web scraping
 - kod dzielący nieustrukturyzowane pliki `.pdf` na podsekcje ułatwiające analizę któtszych fragmentów tekstu oraz eksportujący tabele do plików `.csv`
 - weryfikacja kompletności plików SFCR poprzez weryfikację występowania słów kluczowych
-- aplikacja umożliwiająca urzytkownikowi porównywanie zawartości plików dla różnych lat
+- kod umożliwiający ekstrakcję tabel z plików
+- aplikacja umożliwiająca użytkownikowi analizę oraz porównywanie zawartości plików dla różnych lat
+
+### Struktura projektu
+Główne komponenty aplikacji znajdują się w folderze `app`. Można w nim znaleźć skrypty aplikacji oraz foldery `preprocessing_scripts` oraz `scraper`, które odpowiednio zawierają algorytmy przetwarzające dane pozyskane z pdfów oraz te przeprowadzające web scraping.
 
 Autorzy:
 - Hubert Bujakowski
