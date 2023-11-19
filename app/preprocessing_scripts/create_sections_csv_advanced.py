@@ -152,7 +152,7 @@ def fulfill_df(merged_df, rok, kodLEI):
     merged_df['numer zakładu w systemie UKNF (kod zakładu)'] = kodLEI
     return merged_df
 
-def create_section_df(text, sections, filename):
+def create_section_df(text, sections, filename, section_path):
     """
     Creates a DataFrame from the text and sections.
     """
@@ -172,7 +172,7 @@ def create_section_df(text, sections, filename):
     df = df.apply(replace_content, axis=1)
     df = df.apply(extract_info, axis=1)
     df.rename(columns={'Nazwa Sekcji': 'NAZWA_Sekcji','Content':'treść'},inplace=True)
-    section_ids_path = "data/sekcje.csv"
+    section_ids_path = section_path
     sections_ids_df= pd.read_csv(section_ids_path, sep=';')
 
     merged_df = pd.merge(df, sections_ids_df, left_on='NAZWA_Sekcji', right_on='Nazwa Sekcji (według Rozporządzenia)', how='left')
@@ -194,7 +194,7 @@ def main():
     sections = find_unique_strings(text)
     sections = list(sections)
     sections.sort()
-    merged_df = create_section_df(text, sections, filename)
+    merged_df = create_section_df(text, sections, filename, "data/sekcje.csv")
     merged_df.to_csv('data/sections.csv', index=False, sep=';')
 if __name__ == '__main__':
     main()

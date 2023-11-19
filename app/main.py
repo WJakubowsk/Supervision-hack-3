@@ -3,13 +3,16 @@ import pandas as pd
 from utils import *
 from preprocessing_scripts.completness_check import check_completness
 from preprocessing_scripts.create_sections_csv_advanced import find_unique_strings, create_section_df
+from preprocessing_scripts.find_tables_in_document import check_if_table_in_document, get_all_tables, required_rows_dict
 from scraper import scraper
 import os
 from pathlib import Path
+import pickle
 
 PATH = Path(__file__)
 ZAKLADY_PATH = PATH.parent.parent / 'data' / 'zaklady.csv'
 SFCR_PATH = PATH.parent.parent / 'data' / 'sfcr'
+SEKCJE_PATH = PATH.parent.parent / 'data' / 'sekcje.csv'
 
 def main():
     try:
@@ -36,47 +39,53 @@ def main():
             folder_path = st.sidebar.text_input('Enter local path to directory with files for analysis', '.')
             select_all_files = st.sidebar.checkbox("Select all files")
             selected_files = file_selector(folder_path, select_all_files)
-
+            print(selected_files)
             st.sidebar.header('Destination directory for CSV files')
             destination_folder_path = st.sidebar.text_input('Enter local path to directory where the processed CSV files should be saved', '.')
 
-        if st.sidebar.button('Divide the SFCR documents into sections'):
-            filename = "2023_SFCR_259400IBCICD0KY7ZW46_TU ALLIANZ ŻYCIE POLSKA S.A..pdf" # example, provide pdf file name of your choice
-            pdf_path = os.path.join("data", filename)
-            text = extract_text_from_pdf(pdf_path)
-            sections = find_unique_strings(text)
-            sections = list(sections)
-            sections.sort()
-            merged_df = create_section_df(text, sections, filename)
-            merged_df.to_csv('data/sections.csv', index=False, sep=';')
-            pass
+        if st.sidebar.button('Divide the selected SFCR documents into sections'):
+            for filename in selected_files:
+                pdf_path = os.path.join(PATH.parent.parent, "data", "sfcr", company, filename)
+                text = extract_text_from_pdf(pdf_path)
+                sections = list(find_unique_strings(text))
+                sections.sort()
+                merged_df = create_section_df(text, sections, filename, )
+                merged_df.to_csv(destination_folder_path +  filename + '/sections.csv', index=False, sep=';')
 
         if st.sidebar.button('Check completness of the sections'):
             df = pd.read_csv('../data/dane_jakosciowe.csv', index = False)
             df_completness = check_completness(df)
-            df_completness.to_csv(destination_folder_path, index = False)
+            df_completness.to_csv(destination_folder_path + 'completness.csv', index = False)
 
-            if st.sidebar.button('Extract tables from the file'):
-                #TODO add wyciagnac tabele z pliku
-                pass
+        if st.sidebar.button('Extract tables from the SFCR file'):
+            # for filename in selected_files:
+            #     pdf_path = os.path.join("data", filename)
+            #     tables = get_all_tables(pdf_path)
+            #     for table in tables:
+            #         table_present, table_parts, present_rows, all_cols_present = check_if_table_in_document(tables,table)
+            #         st.markdown(f"Is table{table_present}")
+            #     print(present_rows)
+            #     print(table_parts)
+            #     print(all_cols_present)
+            pass
 
-            if st.sidebar.checkbox('Compare texts from two files'):
-                try:
-                    # Input for file paths
-                    uploaded_file1 = st.file_uploader('Upload first file:', type=['pdf'])
-                    uploaded_file2 = st.file_uploader('Upload second file:', type=['pdf'])
+        if st.sidebar.checkbox('Compare texts from two files'):
+            try:
+                # Input for file paths
+                uploaded_file1 = st.file_uploader('Upload first file:', type=['pdf'])
+                uploaded_file2 = st.file_uploader('Upload second file:', type=['pdf'])
 
-                    text_file1 = extract_text_from_pdf(uploaded_file1)
-                    text_file2 = extract_text_from_pdf(uploaded_file2)
+                text_file1 = extract_text_from_pdf(uploaded_file1)
+                text_file2 = extract_text_from_pdf(uploaded_file2)
 
-                    differences = compare_strings(text_file1, text_file2)
-                    colored_lines = [color_line(line) for line in differences]
-                    st.markdown(f'Estimated similarity between two files: {calculate_similarity_ratio_between_strings(text_file1, text_file2)}%.')
-                    st.markdown(f'### Differences:')
-                    for line in colored_lines:
-                        st.markdown(line, unsafe_allow_html=True)
-                except Exception as e:
-                    st.markdown('Waiting for input..')
+                differences = compare_strings(text_file1, text_file2)
+                colored_lines = [color_line(line) for line in differences]
+                st.markdown(f'Estimated similarity between two files: {calculate_similarity_ratio_between_strings(text_file1, text_file2)}%.')
+                st.markdown(f'### Differences:')
+                for line in colored_lines:
+                    st.markdown(line, unsafe_allow_html=True)
+            except Exception as e:
+                st.markdown('Waiting for input..')
 
 if __name__ == '__main__':
     main()
