@@ -72,15 +72,15 @@ def main():
             df_completness.to_csv(destination_folder_path + filename + '/completness.csv', index = False)
 
         if st.sidebar.button('Extract tables from the SFCR file'):
-            #TODO ERROR
-            for filename in selected_files:
-                pdf_path = os.path.join("data", filename)
-                tables = get_all_tables(pdf_path)
-                for table in tables:
-                    table_present, table_parts, present_rows, all_cols_present = check_if_table_in_document(tables,table)
-                    st.markdown(f"Is table present: {table_present}")
-                    st.markdown("present_rows: ", present_rows)
-                    st.markdown("Are all columns present? ", all_cols_present)
+            # for filename in selected_files:
+            #     pdf_path = os.path.join("data", filename)
+            #     tables = get_all_tables(pdf_path)
+            #     for table in tables:
+            #         table_present, table_parts, present_rows, all_cols_present = check_if_table_in_document(tables,table)
+            #         st.markdown(f"Is table present: {table_present}")
+            #         st.markdown("present_rows: ", present_rows)
+            #         st.markdown("Are all columns present? ", all_cols_present)
+            pass
 
         if st.sidebar.checkbox('Compare texts from two files'):
             try:
@@ -92,6 +92,7 @@ def main():
                 text_file2 = extract_text_from_pdf(uploaded_file2)
 
                 differences = compare_strings(text_file1, text_file2)
+
                 colored_lines = [color_line(line) for line in differences]
                 st.markdown(f'Estimated similarity between two files: {calculate_similarity_ratio_between_strings(text_file1, text_file2)}%.')
                 st.markdown(f'### Differences:')
@@ -99,6 +100,7 @@ def main():
                     st.markdown(line, unsafe_allow_html=True)
             except Exception as e:
                 st.markdown('Waiting for input..')
+ 
 
 if __name__ == '__main__':
     main()
