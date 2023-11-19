@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 streamlit==1.28.0
-=======
 asttokens==2.4.1
 attrs==23.1.0
 beautifulsoup4==4.12.2
@@ -54,4 +52,3 @@ tzdata==2023.3
 urllib3==2.1.0
 wcwidth==0.2.10
 wsproto==1.2.0
->>>>>>> main
