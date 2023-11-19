@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from utils import *
-
+from preprocessing_scripts.completness_check import check_completness
 
 insurance_companies = pd.read_csv('../data/zaklady.csv', sep=';')
 
@@ -14,7 +14,7 @@ def main():
 
     st.selectbox('Choose insurance company', insurance_companies['NAZWA ZAKŁADU'])
 
-
+    st.sidebar.header('Source directory with SFCR files')
     folder_path = st.sidebar.text_input('Enter local path to directory with files for analysis', '.')
     select_all_files = st.sidebar.checkbox("Select all files")
     selected_files = file_selector(folder_path, select_all_files)
@@ -22,15 +22,13 @@ def main():
     st.sidebar.header('Destination directory for CSV files')
     destination_folder_path = st.sidebar.text_input('Enter local path to directory where the processed CSV files should be saved', '.')
 
-    st.write('### Selected files:')
-    st.write(selected_files)
-
     if st.sidebar.button('Divide the SFCR documents into sections'):
         #TODO add podzial na sekcje
         pass
 
     if st.sidebar.button('Check completness of the sections'):
-        #TODO add kompletnosc sekcji
+        df = pd.read_csv('../data/dane_jakosciowe.csv', index = False)
+        df_completness = check_completness(df)
         pass
 
     if st.sidebar.button('Extract tables from the file'):
