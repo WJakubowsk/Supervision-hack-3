@@ -11,7 +11,7 @@ def extract_polish_sentences(text:str)->list[str]:
     :param text: text to extract sentences from
     :return: list of sentences
     """
-    
+
     sentences = nltk.sent_tokenize(text, language='polish')
     return sentences
 
@@ -21,7 +21,7 @@ def average_number_of_words(sentences:list[str])->float:
     :param sentences: list of sentences
     :return: average number of words in a sentence
     """
-    
+
     number_of_words = 0
     for sentence in sentences:
         number_of_words += len(sentence.split())
@@ -33,7 +33,7 @@ def average_number_of_characters(sentences:list[str])->float:
     :param sentences: list of sentences
     :return: average number of characters in a sentence
     """
-    
+
     number_of_characters = 0
     for sentence in sentences:
         number_of_characters += len(sentence)
@@ -45,7 +45,7 @@ def average_number_of_syllables(sentences:list[str])->float:
     :param sentences: list of sentences
     :return: average number of syllables in a sentence
     """
-    
+
     number_of_syllables = 0
     for sentence in sentences:
         number_of_syllables += textstat.syllable_count(sentence, lang='pl_PL')

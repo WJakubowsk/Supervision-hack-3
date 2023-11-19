@@ -80,6 +80,9 @@ def save_scrf_file(pdf_file_url: str, company_code: str, company_name: str, dest
         file.write(response.content)
 
 def run(destination_dir, df, company):
+    """
+    Used in the main.py file to run the scraper.
+    """
     years = [2018, 2019, 2020, 2021, 2022]
     df = df[df['NAZWA ZAKŁADU'] == company]
     for _, row in df.iterrows():

@@ -9,6 +9,20 @@ import os
 from pathlib import Path
 import pickle
 
+# for demo only, removes unnucessary elements from the app:
+st.markdown("""
+    <style>
+        .reportview-container {
+            margin-top: -2em;
+        }
+        #MainMenu {visibility: hidden;}
+        .stDeployButton {display:none;}
+        footer {visibility: hidden;}
+        #stDecoration {display:none;}
+    </style>
+""", unsafe_allow_html=True)
+
+
 PATH = Path(__file__)
 ZAKLADY_PATH = PATH.parent.parent / 'data' / 'zaklady.csv'
 SFCR_PATH = PATH.parent.parent / 'data' / 'sfcr'

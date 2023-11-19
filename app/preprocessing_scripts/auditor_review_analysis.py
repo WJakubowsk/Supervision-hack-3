@@ -57,7 +57,7 @@ def get_review_issue_date(text: str, qa_pipeline: transformers.pipeline = QA_PIP
 def get_auditors_review_outcome(text: str, search_terms: List[str] = SEARCH_TERMS) -> bool:
     """
     Returns the outcome of the auditor's review - whether there were any disclaimers or not.
-  
+
     """
     return True if any(term in text for term in search_terms) else False
 
