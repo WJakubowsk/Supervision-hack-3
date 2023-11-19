@@ -13,6 +13,7 @@ from pdfminer.high_level import extract_text
 from typing import List
 import argparse
 from stqdm import stqdm
+import os
 
 def get_all_links_pdfs(query: str, company_site: str, verbose=False) -> List[str]:
     """
@@ -56,6 +57,9 @@ def save_scrf_file(pdf_file_url: str, company_code: str, company_name: str, dest
     Ignores the pdf files which are not related to the desired insurance company.
     Extracts year information from the pdf_file_url.
     """
+    if not os.path.exists(destination_dir):
+        os.makedirs(destination_dir)
+
     # get pdf content from the given url
     response = requests.get(pdf_file_url)
 
@@ -72,7 +76,7 @@ def save_scrf_file(pdf_file_url: str, company_code: str, company_name: str, dest
     # define the name of the pdf file according to the specified format
     filename = f"{year}_SFCR_{company_code}_{company_name}.pdf"
 
-    with open(destination_dir + filename, 'wb') as file:
+    with open(os.path.join(destination_dir, filename), 'wb') as file:
         file.write(response.content)
 
 def run(destination_dir, df, company):
@@ -92,7 +96,7 @@ def run(destination_dir, df, company):
             pdf_urls = list(set(pdf_urls))
             for pdf_url in stqdm(pdf_urls):
                 save_scrf_file(pdf_url, company_code, company_name,
-                                destination_dir=destination_dir)
+                                destination_dir=os.path.join(destination_dir, company_name))
         except Exception as e:
             print(e)
             time.sleep(10)
