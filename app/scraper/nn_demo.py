@@ -4,6 +4,10 @@ import urllib.parse
 import os
 import pickle
 
+"""
+script for demo purposes only
+"""
+
 def main():
     response = requests.get('https://www.nn.pl/notowania-i-wyniki-finansowe/raporty-finansowe')
     soup = BeautifulSoup(response.text, 'html.parser')
