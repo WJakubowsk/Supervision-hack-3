@@ -1,0 +1,38 @@
+﻿ID SekcjI (stała);id sekcji nadrzędnej (Stała);Nazwa Sekcji (według Rozporządzenia)
+1;NULL(stała);Podsumowanie
+2;NULL;Działalność i wyniki operacyjne
+3;2;Działalność
+4;2;Wynik z działalności ubezpieczeniowej
+5;2;Wynik z działalności lokacyjnej (inwestycyjnej)
+6;2;Wyniki z pozostałych rodzajów działalności
+7;2;Wszelkie inne informacje
+8;NULL;System zarządzania
+9;8;Informacje ogólne o systemie zarządzania
+10;8;Wymogi dotyczące kompetencji i reputacji
+11;8;System zarządzania ryzykiem, w tym własna ocena ryzyka i wypłacalności
+12;8;System kontroli wewnętrznej
+13;8;Funkcja audytu wewnętrznego
+14;8;Funkcja aktuarialna
+15;8;Outsourcing
+16;8;Wszelkie inne informacje
+17;NULL;Profil ryzyka
+18;17;Ryzyko aktuarialne
+19;17;Ryzyko rynkowe
+20;17;Ryzyko kredytowe
+21;17;Ryzyko płynności
+22;17;Ryzyko operacyjne
+23;17;Pozostałe istotne ryzyka
+24;17;Wszelkie inne informacje
+25;NULL;Wycena do celów wypłacalności
+26;25;Aktywa
+27;25;Rezerwy techniczno-ubezpieczeniowe
+28;25;Inne zobowiązania
+29;25;Alternatywne metody wyceny
+30;25;Wszelkie inne informacje
+31;NULL;Zarządzanie kapitałem
+32;31;Środki własne
+33;31;Kapitałowy wymóg wypłacalności i minimalny wymóg kapitałowy
+34;31;Zastosowanie podmodułu ryzyka cen akcji opartego na duracji do obliczenia kapitałowego wymogu wypłacalności
+35;31;Różnice między formułą standardową a stosowanym modelem wewnętrznym
+36;31;Niezgodność z minimalnym wymogiem kapitałowym i niezgodność z kapitałowym wymogiem wypłacalności
+37;31;Wszelkie inne informacje
