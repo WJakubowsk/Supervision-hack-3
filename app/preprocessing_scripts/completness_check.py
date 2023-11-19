@@ -539,7 +539,7 @@ def check_completness(sections:pd.DataFrame) -> pd.DataFrame:
 
 
 def main():
-    path = './dane_jakosciowe.csv' ### provide the name of the preprocesssed CSV with separated section of SFCR
+    path = './dane_jakosciowe.csv' ### provide the name of the preprocesssed CSV with separated section of SFCR file
     df = pd.read_csv(path, index_col=0)
     completness = check_completness(df)
     print(completness)

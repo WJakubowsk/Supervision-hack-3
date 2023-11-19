@@ -188,7 +188,7 @@ def create_section_df(text, sections, filename):
 df_legend = create_additional_df()
 
 def main():
-    filename = "2023_SFCR_259400IBCICD0KY7ZW46_TU ALLIANZ ŻYCIE POLSKA S.A..pdf"
+    filename = "2023_SFCR_259400IBCICD0KY7ZW46_TU ALLIANZ ŻYCIE POLSKA S.A..pdf" # example, provide pdf file name of your choice
     pdf_path = os.path.join("data", filename)
     text = extract_text_from_pdf(pdf_path)
     sections = find_unique_strings(text)

@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from utils import *
 from preprocessing_scripts.completness_check import check_completness
+from preprocessing_scripts.create_sections_csv_advanced import find_unique_strings, create_section_df
 from scraper import scraper
 import os
 
@@ -33,13 +34,20 @@ def main():
         destination_folder_path = st.sidebar.text_input('Enter local path to directory where the processed CSV files should be saved', '.')
 
         if st.sidebar.button('Divide the SFCR documents into sections'):
-            #TODO add podzial na sekcje
+            filename = "2023_SFCR_259400IBCICD0KY7ZW46_TU ALLIANZ ŻYCIE POLSKA S.A..pdf" # example, provide pdf file name of your choice
+            pdf_path = os.path.join("data", filename)
+            text = extract_text_from_pdf(pdf_path)
+            sections = find_unique_strings(text)
+            sections = list(sections)
+            sections.sort()
+            merged_df = create_section_df(text, sections, filename)
+            merged_df.to_csv('data/sections.csv', index=False, sep=';')
             pass
 
         if st.sidebar.button('Check completness of the sections'):
             df = pd.read_csv('../data/dane_jakosciowe.csv', index = False)
             df_completness = check_completness(df)
-            pass
+            df_completness.to_csv(destination_folder_path, index = False)
 
         if st.sidebar.button('Extract tables from the file'):
             #TODO add wyciagnac tabele z pliku
