@@ -116,8 +116,17 @@ def find_unique_strings(text, df):
     Find subsubsections in the text.
     """
     additional_sections = list(df['Section Code'])
-    pattern = r'[A-E]\.\d+\.\d+ '
-    matches = re.findall(pattern, text)
+    pattern1 = r'[A-E]\.\d+\.\d'
+    pattern2 = r'[A-E]\.\d+\.\d+\.\d'
+    pattern3 = r'[A-E]\.\d'
+    pattern4 = r'[A-E]'
+
+    matches1 = re.findall(pattern1, text)
+    matches2 = re.findall(pattern2, text)
+    matches3 = re.findall(pattern3, text)
+    matches4 = re.findall(pattern4, text)
+    matches = matches1 + matches2 + matches3 + matches4
+
     unique_strings = set(matches)
     unique_strings = unique_strings.union(set(additional_sections))
     sorted_items = sorted(list(unique_strings), key=lambda x: (x[0], int(x.split('.')[1]) if len(x.split('.')) > 1 and x.split('.')[1] else 0, int(x.split('.')[2]) if len(x.split('.')) > 2 and x.split('.')[2] else 0))
