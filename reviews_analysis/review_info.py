@@ -16,32 +16,7 @@ QA_PIPELINE = transformers.pipeline(
     tokenizer="henryk/bert-base-multilingual-cased-finetuned-polish-squad1"
 )
 
-# QA_PIPELINE = transformers.pipeline(
-#     "question-answering",
-#     model="dkleczek/bert-base-polish-cased-v1",
-#     tokenizer="dkleczek/bert-base-polish-cased-v1"
-# )
 
-# def extract_text_from_pdf(pdf_path: str) -> str:
-#     """
-#     Extracts text from pdf file. If pdf contains scans instead of machine-encoded text, 
-#     conversion to images and OCR is utilized.
-#     Returns text in one string.
-#     """
-#     with pdfplumber.open(pdf_path) as pdf:
-#         text = ''
-#         for page in pdf.pages:
-#             text += page.extract_text()
-        
-#         # if there is no text, the review is probably a scan, hence OCR
-#         if text == '':
-#             reader = easyocr.Reader(['pl'])
-#             for page in tqdm(pdf.pages):
-#                 img_np = np.array(page.to_image().original)
-#                 result = reader.readtext(img_np)
-#                 extracted_text = ' '.join([res[1] for res in result])
-#                 text += extracted_text + '\n'
-#         return text
 def _extract_text_from_page(page: pdfplumber.page) -> str:
     """
     Extracts text from given page.
