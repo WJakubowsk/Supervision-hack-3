@@ -11,5 +11,5 @@ COPY . /app
 RUN pip3 install --no-cache-dir -r requirements.txt
 EXPOSE 8501
 
-CMD ["streamlit", "run", "--server.port", "8501", "app/main.py"]
+CMD ["streamlit", "run", "--server.port", "8501", "app/app.py"]
 
