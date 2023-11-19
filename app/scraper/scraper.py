@@ -12,6 +12,7 @@ import io
 from pdfminer.high_level import extract_text
 from typing import List
 import argparse
+from stqdm import stqdm
 
 def get_all_links_pdfs(query: str, company_site: str, verbose=False) -> List[str]:
     """
@@ -74,6 +75,27 @@ def save_scrf_file(pdf_file_url: str, company_code: str, company_name: str, dest
     with open(destination_dir + filename, 'wb') as file:
         file.write(response.content)
 
+def run(destination_dir, df, company):
+    years = [2018, 2019, 2020, 2021, 2022]
+    df = df[df['NAZWA ZAKŁADU'] == company]
+    for _, row in df.iterrows():
+        company_site = row['LINK DO STRONY ZAKŁADU']
+        company_code = row['KOD LEI ZAKŁADU']
+        company_name = row['NAZWA ZAKŁADU']
+        try:
+            pdf_urls = []
+            for year in stqdm(years):
+                print(company_site, year)
+                query = f'"Sprawozdanie o wypłacalności i kondycji finansowej" OR "Solvency and financial condition report" OR "Sprawozdanie na temat wypłacalności i kondycji finansowej" OR "SFCR" site:{company_site} filetype:pdf {company_name} {year}'
+                pdf_urls += get_all_links_pdfs(query, company_site)
+
+            pdf_urls = list(set(pdf_urls))
+            for pdf_url in stqdm(pdf_urls):
+                save_scrf_file(pdf_url, company_code, company_name,
+                                destination_dir=destination_dir)
+        except Exception as e:
+            print(e)
+            time.sleep(10)
 
 def main(args):
     df = pd.read_csv(args.data_path, sep=';')
