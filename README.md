@@ -14,6 +14,16 @@ Projekt składa się z wielu modułów, które razem tworzą docelowe narzędzie
 ### Struktura projektu
 Główne komponenty aplikacji znajdują się w folderze `app`. Można w nim znaleźć skrypty aplikacji oraz foldery `preprocessing_scripts` oraz `scraper`, które odpowiednio zawierają algorytmy przetwarzające dane pozyskane z pdfów oraz te przeprowadzające web scraping.
 
+### Uruchamianie aplikacji
+Pobranie potrzebnych pakietów:
+```
+pip install -r requirements.txt
+```
+Aplikację należy uruchomić korzystając z komendy:
+```
+streamlit run app/app.py
+```
+
 Autorzy:
 - Hubert Bujakowski
 - Wiktor Jakubowski
