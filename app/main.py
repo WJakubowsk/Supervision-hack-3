@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from utils import *
 
+
 insurance_companies = pd.read_csv('../data/zaklady.csv', sep=';')
 
 def main():
@@ -13,17 +14,16 @@ def main():
 
     st.selectbox('Choose insurance company', insurance_companies['NAZWA ZAKŁADU'])
 
-    # st.sidebar.header('Files to download')
-    # folder_path = st.sidebar.text_input('Enter local path to directory with files for analysis', '.')
-    
+
+    folder_path = st.sidebar.text_input('Enter local path to directory with files for analysis', '.')
+    select_all_files = st.sidebar.checkbox("Select all files")
+    selected_files = file_selector(folder_path, select_all_files)
+
     st.sidebar.header('Destination directory for CSV files')
     destination_folder_path = st.sidebar.text_input('Enter local path to directory where the processed CSV files should be saved', '.')
 
-    # select_all_files = st.sidebar.checkbox("Select all files")
-    # selected_files = file_selector(folder_path, select_all_files)
-
-    # st.write('### Selected files:')
-    # st.write(selected_files)
+    st.write('### Selected files:')
+    st.write(selected_files)
 
     if st.sidebar.button('Divide the SFCR documents into sections'):
         #TODO add podzial na sekcje
@@ -37,7 +37,7 @@ def main():
         #TODO add wyciagnac tabele z pliku
         pass
 
-    if st.sidebar.checkbox('Compare texts from two files:'):
+    if st.sidebar.checkbox('Compare texts from two files'):
         try:
             # Input for file paths
             uploaded_file1 = st.file_uploader('Upload first file:', type=['pdf'])
