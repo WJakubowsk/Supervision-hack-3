@@ -51,7 +51,7 @@ def main():
             st.error('Error during scraping, try again.')
         else:
             st.sidebar.header('Source directory with SFCR files')
-            folder_path = st.sidebar.text_input('Enter local path to directory with files for analysis', '.')
+            folder_path = st.sidebar.text_input('Enter local path to directory with files for analysis', './')
             select_all_files = st.sidebar.checkbox("Select all files")
             selected_files = file_selector(folder_path, select_all_files)
             st.sidebar.header('Destination directory for CSV files')
@@ -69,9 +69,10 @@ def main():
         if st.sidebar.button('Check completness of the sections'):
             df = pd.read_csv(DANE_JAKOSCIOWE)
             df_completness = check_completness(df)
-            df_completness.to_csv(destination_folder_path + 'completness.csv', index = False)
+            df_completness.to_csv(destination_folder_path + filename + '/completness.csv', index = False)
 
         if st.sidebar.button('Extract tables from the SFCR file'):
+            #TODO ERROR
             for filename in selected_files:
                 pdf_path = os.path.join("data", filename)
                 tables = get_all_tables(pdf_path)
