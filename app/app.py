@@ -1,29 +1,43 @@
 import streamlit as st
-import os
+import pandas as pd
 from utils import *
 
+insurance_companies = pd.read_csv('../data/zaklady.csv', sep=';')
 
 def main():
-    st.title('Supervision hack #SF_CRacker app')
+    st.title('#supervision_hack 3 - #SF_CRacker')
 
-    st.sidebar.title('Filters')
+    st.markdown('### Picipolo')
 
-    st.sidebar.header('Files to download')
-    folder_path = st.sidebar.text_input('Enter local path to files for analysis', '.')
+    st.sidebar.title('Options')
 
-    select_all_files = st.sidebar.checkbox("Select all files")
-    selected_files = file_selector(folder_path, select_all_files)
+    st.selectbox('Choose insurance company', insurance_companies['NAZWA ZAKŁADU'])
 
-    st.write('### Selected files:')
-    st.write(selected_files)
+    # st.sidebar.header('Files to download')
+    # folder_path = st.sidebar.text_input('Enter local path to directory with files for analysis', '.')
+    
+    st.sidebar.header('Destination directory for CSV files')
+    destination_folder_path = st.sidebar.text_input('Enter local path to directory where the processed CSV files should be saved', '.')
 
-    # podziel na sekcje
+    # select_all_files = st.sidebar.checkbox("Select all files")
+    # selected_files = file_selector(folder_path, select_all_files)
 
-    # sprawdz kompletnosc sekcji
+    # st.write('### Selected files:')
+    # st.write(selected_files)
 
-    # wyciagnij tabele z pliku
+    if st.sidebar.button('Divide the SFCR documents into sections'):
+        #TODO add podzial na sekcje
+        pass
 
-    if st.checkbox('Compare Texts from two files:'):
+    if st.sidebar.button('Check completness of the sections'):
+        #TODO add kompletnosc sekcji
+        pass
+
+    if st.sidebar.button('Extract tables from the file'):
+        #TODO add wyciagnac tabele z pliku
+        pass
+
+    if st.sidebar.checkbox('Compare texts from two files:'):
         try:
             # Input for file paths
             uploaded_file1 = st.file_uploader('Upload first file:', type=['pdf'])
