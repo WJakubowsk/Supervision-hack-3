@@ -3,6 +3,7 @@ import re
 import pandas as pd
 import re
 import os
+from typing import List
 
 additional_strings = [
     'A Działalność i wyniki operacyjne',
@@ -111,7 +112,7 @@ def create_section_df(sections_list, text, sections_ids_path):
     merged_df.drop(columns=['Nazwa Sekcji (według Rozporządzenia)', 'Section Name'], inplace=True)
     return merged_df
 
-def find_unique_strings(text, df):
+def find_unique_strings(text: str, df: pd.DataFrame):
     """
     Find subsubsections in the text.
     """
@@ -139,7 +140,7 @@ def find_unique_strings(text, df):
     return sorted_items
 
 
-def extract_content(section_name, text, sections_list):
+def extract_content(section_name: str, text: str, sections_list: List[str]):
     """
     Extracts the content of the section from the text.
     """
