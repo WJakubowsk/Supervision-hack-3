@@ -1,7 +1,7 @@
 # Supervision Hack #3 
 
 ## Opis zadania
-W zadaniu #SF_CRacker skupiliśmy się na stworzeniu narzędzia automatyzującego analizę plików SFCR. Ma ono ułatwić pracę nad raportami poprzez przekształcenie danych do formy łatwej w obróbce.
+W zadaniu #SF_CRacker skupiliśmy się na stworzeniu narzędzia automatyzującego analizę plików SFCR. Ma ono ułatwić pracę urzytkownikom na codzień zajmującym się sprawozdaniami dotyczącymi wypłacalności i kondycji finansowej.
 
 ## Opis rozwiązania
 Projekt składa się z wielu modułów, które razem tworzą docelowe narzędzie. Można wśród nich wyróżnić:
