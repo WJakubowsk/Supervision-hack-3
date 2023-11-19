@@ -27,6 +27,7 @@ PATH = Path(__file__)
 ZAKLADY_PATH = PATH.parent.parent / 'data' / 'zaklady.csv'
 SFCR_PATH = PATH.parent.parent / 'data' / 'sfcr'
 SEKCJE_PATH = PATH.parent.parent / 'data' / 'sekcje.csv'
+DANE_JAKOSCIOWE = PATH.parent.parent / 'data' / 'dane_jakosciowe.csv'
 
 def main():
     try:
@@ -53,7 +54,6 @@ def main():
             folder_path = st.sidebar.text_input('Enter local path to directory with files for analysis', '.')
             select_all_files = st.sidebar.checkbox("Select all files")
             selected_files = file_selector(folder_path, select_all_files)
-            print(selected_files)
             st.sidebar.header('Destination directory for CSV files')
             destination_folder_path = st.sidebar.text_input('Enter local path to directory where the processed CSV files should be saved', '.')
 
@@ -63,25 +63,23 @@ def main():
                 text = extract_text_from_pdf(pdf_path)
                 sections = list(find_unique_strings(text))
                 sections.sort()
-                merged_df = create_section_df(text, sections, filename, )
+                merged_df = create_section_df(text, sections, filename, SEKCJE_PATH)
                 merged_df.to_csv(destination_folder_path +  filename + '/sections.csv', index=False, sep=';')
 
         if st.sidebar.button('Check completness of the sections'):
-            df = pd.read_csv('../data/dane_jakosciowe.csv', index = False)
+            df = pd.read_csv(DANE_JAKOSCIOWE)
             df_completness = check_completness(df)
             df_completness.to_csv(destination_folder_path + 'completness.csv', index = False)
 
         if st.sidebar.button('Extract tables from the SFCR file'):
-            # for filename in selected_files:
-            #     pdf_path = os.path.join("data", filename)
-            #     tables = get_all_tables(pdf_path)
-            #     for table in tables:
-            #         table_present, table_parts, present_rows, all_cols_present = check_if_table_in_document(tables,table)
-            #         st.markdown(f"Is table{table_present}")
-            #     print(present_rows)
-            #     print(table_parts)
-            #     print(all_cols_present)
-            pass
+            for filename in selected_files:
+                pdf_path = os.path.join("data", filename)
+                tables = get_all_tables(pdf_path)
+                for table in tables:
+                    table_present, table_parts, present_rows, all_cols_present = check_if_table_in_document(tables,table)
+                    st.markdown(f"Is table present: {table_present}")
+                    st.markdown("present_rows: ", present_rows)
+                    st.markdown("Are all columns present? ", all_cols_present)
 
         if st.sidebar.checkbox('Compare texts from two files'):
             try:
