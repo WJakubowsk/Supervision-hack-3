@@ -10,14 +10,14 @@ class WebsiteScrapper:
     def download_pdfs(self, url: str, directory: str ='./scraped_files'):
         if os.path.exists(directory):
             os.makedirs(directory, exist_ok=True)
-        
+
         response = requests.get(url)
         soup = BeautifulSoup(response.content, 'html.parser')
-        
+
         links = soup.find_all(['a', 'span', 'p'], href=re.compile(r'\.pdf$'))
         print(links)
         matching_links = [link for link in links if any(keyword.lower() in link.get_text().lower() for keyword in self.search_keywords)]
-        
+
         for link in matching_links:
             if link.name == 'a':
                 pdf_url = link.get('href')
