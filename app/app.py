@@ -49,13 +49,13 @@ def main():
                         scraper.run(destination_dir=SFCR_PATH, df=insurance_companies, company=company)
         except Exception as e:
             st.error('Error during scraping, try again.')
-        else:
-            st.sidebar.header('Source directory with SFCR files')
-            folder_path = st.sidebar.text_input('Enter local path to directory with files for analysis', './')
-            select_all_files = st.sidebar.checkbox("Select all files")
-            selected_files = file_selector(folder_path, select_all_files)
-            st.sidebar.header('Destination directory for CSV files')
-            destination_folder_path = st.sidebar.text_input('Enter local path to directory where the processed CSV files should be saved', '.')
+        # else:
+        st.sidebar.header('Source directory with SFCR files')
+        folder_path = st.sidebar.text_input('Enter local path to directory with files for analysis', './')
+        select_all_files = st.sidebar.checkbox("Select all files")
+        selected_files = file_selector(folder_path, select_all_files)
+        st.sidebar.header('Destination directory for CSV files')
+        destination_folder_path = st.sidebar.text_input('Enter local path to directory where the processed CSV files should be saved', './')
 
         if st.sidebar.button('Divide the selected SFCR documents into sections'):
             for filename in selected_files:
@@ -64,23 +64,23 @@ def main():
                 sections = list(find_unique_strings(text))
                 sections.sort()
                 merged_df = create_section_df(text, sections, filename, SEKCJE_PATH)
-                merged_df.to_csv(destination_folder_path +  filename + '/sections.csv', index=False, sep=';')
-
+                merged_df.to_csv(f'{destination_folder_path}{filename}_sections.csv', index=False, sep=';')
+                print(f'saved in {destination_folder_path}{filename}_sections.csv')
         if st.sidebar.button('Check completness of the sections'):
-            df = pd.read_csv(DANE_JAKOSCIOWE)
-            df_completness = check_completness(df)
-            df_completness.to_csv(destination_folder_path + filename + '/completness.csv', index = False)
+            for filename in selected_files:
+                df = pd.read_csv(DANE_JAKOSCIOWE)
+                df_completness = check_completness(df)
+                df_completness.to_csv(f'{destination_folder_path}{filename[:-17]}_completness.csv', index = False)
 
         if st.sidebar.button('Extract tables from the SFCR file'):
-            # for filename in selected_files:
-            #     pdf_path = os.path.join("data", filename)
-            #     tables = get_all_tables(pdf_path)
-            #     for table in tables:
-            #         table_present, table_parts, present_rows, all_cols_present = check_if_table_in_document(tables,table)
-            #         st.markdown(f"Is table present: {table_present}")
-            #         st.markdown("present_rows: ", present_rows)
-            #         st.markdown("Are all columns present? ", all_cols_present)
-            pass
+            for filename in selected_files:
+                pdf_path = os.path.join(PATH.parent.parent, "data", "sfcr", company, filename)
+                tables = get_all_tables(pdf_path)
+                for table in tables:
+                    table_present, table_parts, present_rows, all_cols_present = check_if_table_in_document(tables,table)
+                    st.markdown(f"Is table present: {table_present}")
+                    st.markdown("present_rows: ", present_rows)
+                    st.markdown("Are all columns present? ", all_cols_present)
 
         if st.sidebar.checkbox('Compare texts from two files'):
             try:

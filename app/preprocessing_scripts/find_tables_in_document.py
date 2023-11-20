@@ -134,7 +134,7 @@ def find_first_part_of_table(tables:list, name:str, code:str) -> int:
         i+=1
     return i, table_present
 
-def check_if_table_in_document(tables:list, table_name:str) -> (bool, list, dict,bool):
+def check_if_table_in_document(tables:list, table_name:str) -> (bool, list, dict, bool):
     """Checks if PDF file contains table.
 
     Args:
